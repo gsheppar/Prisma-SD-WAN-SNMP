@@ -120,7 +120,33 @@ def deleteSNMP(cgx, description):
                         if not resp:
                             print("Error deleting SNMP Agent on " + name)
                         else:
-                            print("Deleted SNMP Agent on " + name)
+                            print("Deleted SNMP Agent with description: " + description + " on " + name )
+    return True, "200"
+
+def deleteSNMPall(cgx):
+    elem_resp = cgx.get.elements()
+    elem_list = elem_resp.cgx_content.get('items', None)
+    if not elem_resp.cgx_status or not elem_list:
+        logger.info("ERROR: unable to get elements for account '{0}'.".format(cgx_session.tenant_name))
+        return False
+    for element in elem_list:
+        elem_id = element['id']
+        name = element['name']
+        sid = element['site_id']
+        model_name = element['model_name']
+        if name == None:
+            name = "Unamed device"
+        if not sid is None:
+            snmp_resp = cgx.get.snmpagents(site_id=sid,element_id=elem_id)
+            snmp_resp = snmp_resp.cgx_content.get('items', None)
+            if snmp_resp:
+                for snmp in snmp_resp:
+                    snmp_id = snmp['id']
+                    resp = cgx.delete.snmpagents(site_id=sid, element_id=elem_id, snmpagent_id=snmp_id)
+                    if not resp:
+                        print("Error deleting SNMP Agent on " + name)
+                    else:
+                        print("Deleted SNMP Agent on " + name)
     return True, "200"
                     
                  
@@ -152,7 +178,9 @@ def go():
     
     # Allow Controller modification and debug level sets.
     config_group = parser.add_argument_group('Config', 'These options change how the configuration is generated.')
-    config_group.add_argument("--destroy", help="DESTROY SNMP agents",
+    config_group.add_argument("--destroy", help="DESTROY SNMP agent that matches the description",
+                              default=False, action="store_true")
+    config_group.add_argument("--destroyall", help="DESTROY all SNMP agents",
                               default=False, action="store_true")
     config_group.add_argument("--get", help="Get SNMP agents",
                               default=False, action="store_true")
@@ -161,6 +189,7 @@ def go():
 
     args = vars(parser.parse_args())
     destroy = args['destroy']
+    destroyall = args['destroyall']
     get = args['get']
     
     
@@ -224,6 +253,8 @@ def go():
         
     if destroy == True:
         deleteSNMP(cgx, data["description"])
+    elif destroyall == True:
+        deleteSNMPall(cgx)
     elif get == True:
         getSNMP(cgx)
     else:
