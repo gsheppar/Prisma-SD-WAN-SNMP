@@ -1,5 +1,5 @@
 # Prisma SD-WAN SNMP (Preview)
-Script to help bulk create or delete SNMP and SNMP traps. 
+Script to help bulk create or delete SNMP Agent and SNMP traps. 
 
 #### License
 MIT
@@ -17,7 +17,7 @@ MIT
  Please generate your API token and add it to cloudgenix_settings.py
  
  - Get all current SNMP settings 
- 1. ./SNMPAgent --get or ./SNMPTraps.py --get
+ 1. ./SNMPAgent.py --get or ./SNMPTraps.py --get
  
  - Destroy all current SNMP settings if description matches your settings 
  1. Update SNMPAgent.py or SNMPTraps.py to have the right desction in the data 
