@@ -20,7 +20,7 @@ MIT
  1. ./SNMPAgent.py --get or ./SNMPTraps.py --get
  
  - Destroy all sites current SNMP settings if description matches your settings 
- 1. Update SNMPAgent.py or SNMPTraps.py to have the right desction in the data 
+ 1. Update SNMPAgent.py or SNMPTraps.py to have the right settings in the data filed of data 
  2. Here is an example data = {"description":"Example","tags":None,"v2_config":{"community":"test","enabled":"true"},"v3_config":None}
  3. Anything with SNMP description "Example" will be removed
  4. ./SNMPAgent --destroy or ./SNMPTraps.py --destroy
