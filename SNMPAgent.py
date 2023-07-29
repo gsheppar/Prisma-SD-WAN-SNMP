@@ -8,6 +8,8 @@ import logging
 import os
 import datetime
 
+jdout = cloudgenix.jdout
+
 
 # Global Vars
 TIME_BETWEEN_API_UPDATES = 60       # seconds
@@ -68,6 +70,7 @@ def addSNMP(cgx, data):
                 resp = cgx.post.snmpagents(site_id=sid, element_id=elem_id, data=data)
                 if not resp:
                     print("Error creating SNMP Agent on " + name)
+                    print(jd_detailed(resp))
                 else:
                     print("Created SNMP Agent on " + name)         
     return True, "200"
